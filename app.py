@@ -15,15 +15,15 @@ app.config["SECRET_KEY"] = os.urandom(128)
 app.config["SQLALCHEMY_POOL_TIMEOUT"] = 86400
 app.config["SQLALCHEMY_POOL_SIZE"] = 200
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 100
-"""
 app.config[
     "SQLALCHEMY_DATABASE_URI"
 ] = "mysql+pymysql://pastebinCloneApi:farizi1234@pastebinCloneApi.mysql.pythonanywhere-services.com/pastebinCloneApi$pasteBin"
-"""
 
+"""
 app.config[
     "SQLALCHEMY_DATABASE_URI"
 ] = "mysql+pymysql://root:f%40r1Zi1906@localhost:3306/book_api"
+"""
 
 
 @app.errorhandler(404)
