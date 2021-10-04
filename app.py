@@ -117,7 +117,8 @@ def add_code():
     return jsonify(
         {
             "message": "successfully added code",
-            "code_url": url_for("get_code", id=unique_id),
+            "code_url": "https://pastebincloneapi.pythonanywhere.com/"
+            + url_for("get_code", id=unique_id),
             "unique_id": unique_id,
             "status": 201,
         }
