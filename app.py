@@ -3,19 +3,27 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_marshmallow import Marshmallow
 from datetime import datetime
+from flask_cors import CORS
 import os
 
 app = Flask(__name__)
 db = SQLAlchemy(app, session_options={"autoflush": False})
 migrate = Migrate(app, db)
 ma = Marshmallow(app)
+CORS(app)
 app.config["SECRET_KEY"] = os.urandom(128)
 app.config["SQLALCHEMY_POOL_TIMEOUT"] = 86400
 app.config["SQLALCHEMY_POOL_SIZE"] = 200
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 100
+"""
 app.config[
     "SQLALCHEMY_DATABASE_URI"
 ] = "mysql+pymysql://pastebinCloneApi:farizi1234@pastebinCloneApi.mysql.pythonanywhere-services.com/pastebinCloneApi$pasteBin"
+"""
+
+app.config[
+    "SQLALCHEMY_DATABASE_URI"
+] = "mysql+pymysql://root:f%40r1Zi1906@localhost:3306/book_api"
 
 
 @app.errorhandler(404)
@@ -43,6 +51,11 @@ class Codes(db.Model):
 @app.route("/")
 def main():
     return render_template("index.html")
+
+
+@app.route("/demo")
+def demo():
+    return render_template("demo.html")
 
 
 @app.route("/get_code/<id>", methods=["GET"])
@@ -83,13 +96,21 @@ def add_code():
     code_title = request.args.get("code_title")
     code = request.args.get("code")
     languange = request.args.get("languange")
+    test = request.args.get("test")
+    print(bool(test))
+
+    if bool(test) == True:
+        return jsonify({"message": "it's just testing", "status": 200})
 
     length = 4
     unique_id = "".join(
         random.choices(string.ascii_lowercase + string.digits, k=length)
     )
     add = Codes(
-        code_title=code_title, code=code, languange=languange, unique_id=unique_id
+        code_title=code_title,
+        code=code,
+        languange=languange.lower(),
+        unique_id=unique_id,
     )
     db.session.add(add)
     db.session.commit()
@@ -97,6 +118,8 @@ def add_code():
         {
             "message": "successfully added code",
             "code_url": url_for("get_code", id=unique_id),
+            "unique_id": unique_id,
+            "status": 201,
         }
     )
 
