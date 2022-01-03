@@ -45,7 +45,7 @@ def run():
     from .config import Config,ConfigProd
     
     # flask app factory
-    app.config.from_object(Config)
+    app.config.from_object(ConfigProd)
     db.init_app(app)
     migrate.init_app(app, db, compare_type=True)
     cache.init_app(app)

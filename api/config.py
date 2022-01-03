@@ -26,6 +26,6 @@ class ConfigProd(Config):
     ENV = "production"
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = (
-       "mysql+pymysql://Alphacode:FDCmGz3cHqstUgB@Alphacode.mysql.pythonanywhere-services.com/Alphacode$Alphacode"
+       "mysql+pymysql://pastebinCloneApi:farizi1234@pastebinCloneApi.mysql.pythonanywhere-services.com/pastebinCloneApi$pasteBin"
     )
     JWT_COOKIE_SECURE = True
