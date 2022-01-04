@@ -25,7 +25,7 @@ The api hosted at : https://pastebincloneapi.pythonanywhere.com/api/v1/paste
    ```bash
    pip install requirements.txt
    ```
-5. Run server
+5. Run server 
    ```bash
    python app.py
    ```
