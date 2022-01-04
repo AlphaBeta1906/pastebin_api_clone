@@ -25,7 +25,14 @@ The api hosted at : https://pastebincloneapi.pythonanywhere.com/api/v1/paste
    ```bash
    pip install requirements.txt
    ```
-5. Run server 
+5. Migrate database(delete `migrations` folder first)
+   ```bash
+   # connect your database in config.py file
+   flask db init
+   flask db migrate
+   flask db upgrade
+   ```
+7. Run server 
    ```bash
    python app.py
    ```
