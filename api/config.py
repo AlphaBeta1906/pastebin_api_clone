@@ -13,6 +13,7 @@ class Config(object):
     CACHE_DEFAULT_TIMEOUT = 3600
     
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+    print(os.environ.get("DATABASE_URL"))
     SQLALCHEMY_POOL_TIMEOUT = 86400
     SQLALCHEMY_POOL_SIZE = 200
     SQLALCHEMY_POOL_RECYCLE = 100
