@@ -1,5 +1,6 @@
-from flask import Blueprint,jsonify,request,abort,redirect,url_for
+from flask import Blueprint,jsonify,request,abort,redirect,url_for,current_app
 from ..model import Paste,pastes_schema,paste_schema
+from .. import cache
 
 paste = Blueprint("paste", __name__)
 
@@ -15,9 +16,10 @@ def get_unique_id():
 def main():
     return redirect(url_for("paste.get_paste"))    
 
-@paste.get("/paste",defaults={"unique_id":None})
+@paste.get("/paste/",defaults={"unique_id":None})
 @paste.get("/paste/<unique_id>")
-def get_paste(unique_id):        
+@cache.cached(timeout=60)
+def get_paste(unique_id):
     if unique_id:
         paste = Paste.query.filter_by(unique_id=unique_id).first_or_404()
         return paste_schema.dump(paste)

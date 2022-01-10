@@ -5,8 +5,6 @@ class Config(object):
     from dotenv import load_dotenv,dotenv_values
 
     basedir = os.path.abspath(os.path.dirname(__file__))
-    project_folder = os.path.expanduser('~/pastebin_api_clon')
-    load_dotenv(os.path.join(project_folder, '.env'))
 
     DEBUG = True
     ENV = "development"
@@ -25,9 +23,4 @@ class Config(object):
 class ConfigProd(Config):
     ENV = "production"
     DEBUG = False
-    """
-    SQLALCHEMY_DATABASE_URI = (
-       "mysql+pymysql://pastebinCloneApi:farizi1234@pastebinCloneApi.mysql.pythonanywhere-services.com/pastebinCloneApi$pasteBin"
-    )
-    """
 
