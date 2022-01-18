@@ -38,7 +38,7 @@ def get_paste(unique_id):
         return paste_schema.dump(paste)
     if pages:
         print(get_start(pages))
-        pastes = Paste.query.offset(get_start(pages,limit=1)).limit(10).all()
+        pastes = Paste.query.offset(get_start(pages,limit=9)).limit(10).all()
     pastes =  pastes_schema.dump(pastes)
     return jsonify(pastes=pastes)
     
