@@ -30,19 +30,23 @@ def main():
 @paste.get("/paste/<unique_id>")
 @cache.cached(timeout=60)
 def get_paste(unique_id):
-    pages = None if not request.args.get("page") else int(request.args.get("page"))
-    print(pages)
     pastes = Paste.query.all()
     if unique_id:
         paste = Paste.query.filter_by(unique_id=unique_id).first_or_404()
         return paste_schema.dump(paste)
-    if pages:
-        print(get_start(pages))
-        pastes = Paste.query.offset(get_start(pages,limit=10)).limit(10).all()
     pastes =  pastes_schema.dump(pastes)
     return jsonify(pastes=pastes)
-    
 
+@paste.get("/pastes")
+def page_paste():
+    pages = 1 if not request.args.get("page") else int(request.args.get("page"))
+    print(pages)
+    pastes = Paste.query.offset(get_start(pages,limit=10)).limit(10).all()
+    pastes =  pastes_schema.dump(pastes)
+    if not pastes:
+        return abort(404)
+    return jsonify(pastes=pastes)
+    
 @paste.post("/paste")
 def new_paste():
     try:
