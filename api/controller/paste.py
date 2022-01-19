@@ -40,8 +40,7 @@ def get_paste(unique_id):
 @paste.get("/pastes")
 def page_paste():
     pages = 1 if not request.args.get("page") else int(request.args.get("page"))
-    print(pages)
-    pastes = Paste.query.offset(get_start(pages,limit=10)).limit(10).all()
+    pastes = Paste.query.filter(Paste.unique_id != "").offset(get_start(pages,limit=10)).limit(10).all()
     pastes =  pastes_schema.dump(pastes)
     if not pastes:
         return abort(404)
