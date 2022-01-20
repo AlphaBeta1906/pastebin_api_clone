@@ -1,4 +1,4 @@
-from flask import Blueprint,jsonify,request,abort,redirect,url_for,current_app
+from flask import Blueprint,jsonify,request,abort,redirect,url_for,current_app,Response
 from ..model import Paste,pastes_schema,paste_schema
 from .. import cache
 
@@ -59,7 +59,17 @@ def new_paste():
     paste.add()
     return jsonify(message="paste successfully created",unique_id=unique_id)
     
-    
+@paste.get("/paste/download/<unique_id>")
+def download_paste(unique_id):
+    return redirect(url_for("paste.download",filename = f"{unique_id}.txt"))
+
+@paste.get("/dl/<filename>")
+def download(filename):
+    paste = Paste.query.filter_by(unique_id = filename.split(".")[0]).first_or_404()
+    file = open(f"{paste.title}.txt","w")
+    file.write(paste.code)
+    return current_app.response_class(paste.code,mimetype = "text/file")    
+
 @paste.get("/test")
 def test():
     return jsonify(message="api connected")
