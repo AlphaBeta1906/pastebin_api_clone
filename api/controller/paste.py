@@ -69,7 +69,7 @@ def download_paste(unique_id):
       "cs": "cs",
       "ruby": "ruby",
       "go": "go",
-      "rust": "rst",
+      "rust": "rs",
       "jsx": "jsx",
       "tsx": "tsx",
       "javascript": "js",
