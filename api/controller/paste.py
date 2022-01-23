@@ -99,8 +99,6 @@ def download_paste(unique_id):
 @paste.get("/dl/<filename>")
 def download(filename):
     paste = Paste.query.filter_by(unique_id = filename.split(".")[0]).first_or_404()
-    file = open(f"{paste.title}.txt","w")
-    file.write(paste.code)
     return current_app.response_class(paste.code,mimetype = "text/file")    
 
 @paste.get("/test")
