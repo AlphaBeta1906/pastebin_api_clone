@@ -69,28 +69,10 @@ def new_paste():
     
 @paste.get("/paste/download/<unique_id>")
 def download_paste(unique_id):
-    Lang = {
-      "python": "py",
-      "java": "java",
-      "c": "c",
-      "cpp": "cpp",
-      "cs": "cs",
-      "ruby": "ruby",
-      "go": "go",
-      "rust": "rs",
-      "jsx": "jsx",
-      "tsx": "tsx",
-      "javascript": "js",
-      "typescript": "ts",
-      "haskell": "hs",
-      "elm": "elm",
-      "erlang": "erl",
-      "elixir": "ex"
-    }
     paste = Paste.query.filter_by(unique_id = unique_id).first_or_404()
     filename = None
     try:
-        filename = f"{unique_id}.{Lang[paste.language]}"
+        filename = f"{unique_id}.{paste.language}"
     except KeyError:
         filename = f"{unique_id}.txt"
         
