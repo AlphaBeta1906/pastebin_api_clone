@@ -22,6 +22,23 @@ class Paste(db.Model):
     def add(self):
         db.session.add(self)
         db.session.commit()
+    def get_paste_desc_paged(self,offset):
+        return (self.query
+                     .filter(Paste.unique_id != "")
+                     .order_by(Paste.id.desc())
+                     .offset(offset)
+                     .limit(10)
+                     .all()
+               )
+    def get_paste_paged(self,offset):
+        return (self.query
+                     .filter(Paste.unique_id != "")
+                     .offset(offset)
+                     .limit(10)
+                     .all()
+               )            
+    def get_all():
+        return self.query.all()
 
 
 class PasteSchema(marshmallow.Schema):
