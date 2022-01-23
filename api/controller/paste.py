@@ -37,11 +37,19 @@ def get_paste(unique_id):
     pastes =  pastes_schema.dump(pastes)
     return jsonify(pastes=pastes)
 
-@paste.get("/pastes")
-def page_paste():
+@paste.get("/pastes",defaults={"sort":"latest"})
+@paste.get("/pastes/<sort>")
+def page_paste(sort):
     pages = 1 if not request.args.get("page") else int(request.args.get("page"))
-    pastes = Paste.query.filter(Paste.unique_id != "").offset(get_start(pages,limit=10)).limit(10).all()
-    pastes =  pastes_schema.dump(pastes)
+    pastes = Paste()
+    start = get_start(pages,limit=10)
+    _sort = {
+        "latest":pastes.get_paste_desc_paged,
+        "oldest":pastes.get_paste_paged
+    }
+    
+    _pastes = _sort[sort](start)
+    pastes =  pastes_schema.dump(_pastes)
     if not pastes:
         return abort(404)
     return jsonify(pastes=pastes)
