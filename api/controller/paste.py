@@ -30,11 +30,10 @@ def main():
 @paste.get("/paste/<unique_id>")
 @cache.cached(timeout=60)
 def get_paste(unique_id):
-    pastes = Paste.query.all()
+    _paste = Paste()
     if unique_id:
-        paste = Paste.query.filter_by(unique_id=unique_id).first_or_404()
-        return paste_schema.dump(paste)
-    pastes =  pastes_schema.dump(pastes)
+        return _paste.get_one(unique_id)
+    pastes = _paste.get_all()
     return jsonify(pastes=pastes)
 
 @paste.get("/pastes",defaults={"sort":"latest"})
@@ -49,10 +48,7 @@ def page_paste(sort):
     }
     
     _pastes = _sort[sort](start)
-    pastes =  pastes_schema.dump(_pastes)
-    if not pastes:
-        return abort(404)
-    return jsonify(pastes=pastes)
+    return jsonify(pastes=_pastes)
     
 @paste.post("/paste")
 def new_paste():

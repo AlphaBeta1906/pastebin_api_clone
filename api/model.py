@@ -3,6 +3,10 @@ from sqlalchemy.sql import func
 
 from . import db,marshmallow
 
+class PasteSchema(marshmallow.Schema):
+    class Meta:
+        # Fields to expose
+        fields = ("id","title", "code", "language", "date_created","unique_id")
 
 class Paste(db.Model):
     """table where code/posts are stored"""
@@ -13,6 +17,10 @@ class Paste(db.Model):
     language = db.Column(db.String(200), nullable=False)
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
     unique_id = db.Column(db.String(10),nullable=False)
+    
+    paste_schema = PasteSchema()
+    pastes_schema = PasteSchema(many=True)    
+    
     def __init__(self,id=None,title=None,code=None,language=None,unique_id=None):
             self.id = id
             self.title = title
@@ -23,28 +31,30 @@ class Paste(db.Model):
         db.session.add(self)
         db.session.commit()
     def get_paste_desc_paged(self,offset):
-        return (self.query
+        pastes = (self.query
                      .filter(Paste.unique_id != "")
                      .order_by(Paste.id.desc())
                      .offset(offset)
                      .limit(10)
                      .all()
                )
+        return self.pastes_schema.dump(pastes)
     def get_paste_paged(self,offset):
-        return (self.query
+        pastes =  (self.query
                      .filter(Paste.unique_id != "")
                      .offset(offset)
                      .limit(10)
                      .all()
-               )            
-    def get_all():
-        return self.query.all()
+               ) 
+        return self.pastes_schema.dump(pastes)           
+    def get_all(self):
+        pastes = self.query.all()
+        return self.pastes_schema.dump(pastes)
+    def get_one(self,unique_id):
+        paste = self.query.filter_by(unique_id=unique_id).first_or_404()
+        return self.paste_schema.dump(paste)
 
 
-class PasteSchema(marshmallow.Schema):
-    class Meta:
-        # Fields to expose
-        fields = ("id","title", "code", "language", "date_created","unique_id")
     
 paste_schema = PasteSchema()
 pastes_schema = PasteSchema(many=True)
