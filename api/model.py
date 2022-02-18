@@ -30,7 +30,7 @@ class Paste(db.Model):
     def add(self):
         db.session.add(self)
         db.session.commit()
-    def get_paste_desc_paged(self,offset):
+    def get_paste_desc_paged(self,offset,_language=None):
         pastes = (self.query
                      .filter(Paste.unique_id != "")
                      .order_by(Paste.id.desc())
@@ -38,14 +38,32 @@ class Paste(db.Model):
                      .limit(10)
                      .all()
                )
+        if _language:
+            pastes = (self.query
+                     .filter(Paste.unique_id != "")
+                     .filter_by(language=_language)
+                     .order_by(Paste.id.desc())
+                     .offset(offset)
+                     .limit(10)
+                     .all()
+               )            
         return self.pastes_schema.dump(pastes)
-    def get_paste_paged(self,offset):
+    def get_paste_paged(self,offset,_language=None):
         pastes =  (self.query
                      .filter(Paste.unique_id != "")
                      .offset(offset)
                      .limit(10)
                      .all()
                ) 
+        print(_language)
+        if _language:
+            pastes = (self.query
+                     .filter(Paste.unique_id != "")
+                     .filter_by(language=_language)
+                     .offset(offset)
+                     .limit(10)
+                     .all()
+               )          
         return self.pastes_schema.dump(pastes)           
     def get_all(self):
         pastes = self.query.all()
@@ -53,9 +71,3 @@ class Paste(db.Model):
     def get_one(self,unique_id):
         paste = self.query.filter_by(unique_id=unique_id).first_or_404()
         return self.paste_schema.dump(paste)
-
-
-    
-paste_schema = PasteSchema()
-pastes_schema = PasteSchema(many=True)
-

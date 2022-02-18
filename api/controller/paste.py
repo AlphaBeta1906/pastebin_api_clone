@@ -1,5 +1,5 @@
 from flask import Blueprint,jsonify,request,abort,redirect,url_for,current_app,Response
-from ..model import Paste,pastes_schema,paste_schema
+from ..model import Paste
 from .. import cache
 
 paste = Blueprint("paste", __name__)
@@ -36,9 +36,9 @@ def get_paste(unique_id):
     pastes = _paste.get_all()
     return jsonify(pastes=pastes)
 
-@paste.get("/pastes",defaults={"sort":"latest"})
-@paste.get("/pastes/<sort>")
-def page_paste(sort):
+@paste.get("/pastes",defaults={"sort":"latest","language": None})
+@paste.get("/pastes/<language>/<sort>")
+def page_paste(language,sort):
     pages = 1 if not request.args.get("page") else int(request.args.get("page"))
     pastes = Paste()
     start = get_start(pages,limit=10)
@@ -46,8 +46,9 @@ def page_paste(sort):
         "latest":pastes.get_paste_desc_paged,
         "oldest":pastes.get_paste_paged
     }
-    
-    _pastes = _sort[sort](start)
+    print(sort)
+    print(language)
+    _pastes = _sort[sort](start,language)
     return jsonify(pastes=_pastes)
     
 @paste.post("/paste")
