@@ -55,7 +55,6 @@ class Paste(db.Model):
                      .limit(10)
                      .all()
                ) 
-        print(_language)
         if _language:
             pastes = (self.query
                      .filter(Paste.unique_id != "")
@@ -63,7 +62,8 @@ class Paste(db.Model):
                      .offset(offset)
                      .limit(10)
                      .all()
-               )          
+               )
+        print(pastes)          
         return self.pastes_schema.dump(pastes)           
     def get_all(self):
         pastes = self.query.all()

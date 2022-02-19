@@ -37,7 +37,7 @@ def get_paste(unique_id):
     return jsonify(pastes=pastes)
 
 @paste.get("/pastes",defaults={"sort":"latest","language": None})
-@paste.get("/pastes/<sort>",defaults={"language": None})
+@paste.get("/pastes/<sort>/",defaults={"language": None})
 @paste.get("/pastes/<language>",defaults={"sort":"latest"})
 @paste.get("/pastes/<sort>/<language>")
 def page_paste(language,sort):
@@ -50,7 +50,10 @@ def page_paste(language,sort):
     }
     print(sort)
     print(language)
-    _pastes = _sort[sort](start,language)
+    try:
+        _pastes = _sort[sort](start,language)
+    except KeyError:
+        abort(404)
     return jsonify(pastes=_pastes)
     
 @paste.post("/paste")
