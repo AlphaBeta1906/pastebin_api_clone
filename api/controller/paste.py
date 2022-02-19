@@ -37,7 +37,8 @@ def get_paste(unique_id):
     return jsonify(pastes=pastes)
 
 @paste.get("/pastes",defaults={"sort":"latest","language": None})
-@paste.get("/pastes/<language>/<sort>")
+@paste.get("/pastes/<sort>",defaults={"language": None})
+@paste.get("/pastes/<sort>/<language>")
 def page_paste(language,sort):
     pages = 1 if not request.args.get("page") else int(request.args.get("page"))
     pastes = Paste()
