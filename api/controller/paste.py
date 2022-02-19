@@ -38,6 +38,7 @@ def get_paste(unique_id):
 
 @paste.get("/pastes",defaults={"sort":"latest","language": None})
 @paste.get("/pastes/<sort>",defaults={"language": None})
+@paste.get("/pastes/<language>",defaults={"sort":"latest"})
 @paste.get("/pastes/<sort>/<language>")
 def page_paste(language,sort):
     pages = 1 if not request.args.get("page") else int(request.args.get("page"))
