@@ -51,7 +51,7 @@ class Paste(db.Model):
         return self.pastes_schema.dump(pastes)
     def get_paste_paged(self,offset,_language=None):
         pastes =  (self.query
-                     .filter(Paste.unique_id != "")
+                     .filter((Paste.unique_id != "") | (Paste.title != "") )
                      .offset(offset)
                      .limit(10)
                      .all()
