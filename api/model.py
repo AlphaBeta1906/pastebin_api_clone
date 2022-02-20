@@ -32,7 +32,7 @@ class Paste(db.Model):
         db.session.commit()
     def get_paste_desc_paged(self,offset,_language=None):
         pastes = (self.query
-                     .filter((Paste.unique_id != "") | (Paste.title != ""))
+                     .filter(or_(Paste.unique_id != "",Paste.title != ""))
                      .order_by(Paste.id.desc())
                      .offset(offset)
                      .limit(10)
@@ -40,7 +40,7 @@ class Paste(db.Model):
                )
         if _language:
             pastes = (self.query
-                     .filter((Paste.unique_id != "") | (Paste.title != ""))
+                     .filter(or_(Paste.unique_id != "",Paste.title != ""))
                      .filter_by(language=_language)
                      .order_by(Paste.id.desc())
                      .offset(offset)
