@@ -1,6 +1,5 @@
 from flask import jsonify,abort
 from sqlalchemy.sql import func
-from sqlalchemy import or_
 
 from . import db,marshmallow
 
@@ -33,7 +32,7 @@ class Paste(db.Model):
         db.session.commit()
     def get_paste_desc_paged(self,offset,_language=None):
         pastes = (self.query
-                     .filter((Paste.unique_id != "") | (Paste.title != "") )
+                     .filter(Paste.unique_id != "")
                      .order_by(Paste.id.desc())
                      .offset(offset)
                      .limit(10)
@@ -51,7 +50,7 @@ class Paste(db.Model):
         return self.pastes_schema.dump(pastes)
     def get_paste_paged(self,offset,_language=None):
         pastes =  (self.query
-                     .filter((Paste.unique_id != "") | (Paste.title != "") )
+                     .filter(Paste.unique_id != "")
                      .offset(offset)
                      .limit(10)
                      .all()
