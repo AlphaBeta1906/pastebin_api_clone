@@ -64,6 +64,8 @@ def new_paste():
         language = request.get_json()["language"]
     except KeyError:
         abort(400)
+    except TypeError:
+        abort(400)
     unique_id = get_unique_id()
     paste = Paste(title=title,code=code,language=language,unique_id=unique_id) 
     paste.add()
