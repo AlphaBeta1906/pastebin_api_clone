@@ -24,3 +24,9 @@ class ConfigProd(Config):
     ENV = "production"
     DEBUG = False
 
+class ConfigTest(Config):
+    TESTING=True
+    SQLALCHEMY_DATABASE_URI = "sqlite:///test.db"
+    SQLALCHEMY_POOL_TIMEOUT = None
+    SQLALCHEMY_POOL_SIZE = None
+    SQLALCHEMY_POOL_RECYCLE = None
